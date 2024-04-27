@@ -13,10 +13,18 @@ fun Context.toastNormal(message: CharSequence, duration: Int = Toast.LENGTH_SHOR
     Toasty.normal(this, message, duration).show()
 }
 
+fun Context.toastNormal(message: UiText, duration: Int = Toast.LENGTH_SHORT) {
+    Toasty.normal(this, message.asString(this), duration).show()
+}
+
 fun Context.toastError(@StringRes message: Int, duration: Int = Toast.LENGTH_SHORT) {
     Toasty.error(this, message, duration, false).show()
 }
 
 fun Context.toastError(message: CharSequence, duration: Int = Toast.LENGTH_SHORT) {
     Toasty.error(this, message, duration, false).show()
+}
+
+fun Context.toastError(message: UiText, duration: Int = Toast.LENGTH_SHORT) {
+    Toasty.error(this, message.asString(this), duration, false).show()
 }
