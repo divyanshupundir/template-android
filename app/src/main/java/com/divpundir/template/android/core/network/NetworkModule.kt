@@ -1,5 +1,6 @@
 package com.divpundir.template.android.core.network
 
+import com.divpundir.template.android.core.preferences.AccountPreference
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.slack.eithernet.ApiResultCallAdapterFactory
 import com.slack.eithernet.ApiResultConverterFactory
@@ -33,12 +34,14 @@ object NetworkModule {
     fun provideRetrofit(
         json: Json,
         okHttpClient: OkHttpClient,
+        accPrefManager: AccountPreference.Manager
     ): Retrofit = Retrofit.Builder()
         .baseUrl(NetworkConstants.API_BASE_URL)
         .client(
             okHttpClient
                 .newBuilder()
                 .addInterceptor(HeaderInterceptor("Content-Type", "application/json"))
+                .addInterceptor(AutoAuthInterceptor { accPrefManager.authToken })
                 .build()
         )
         .addConverterFactory(ApiResultConverterFactory)
