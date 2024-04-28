@@ -18,7 +18,7 @@ object AccountPreference {
 
     private const val KEY_AUTH_TOKEN = KEY_PREFIX + "auth_token"
     private const val KEY_ID = KEY_PREFIX + "id"
-    private const val KEY_EMAIL = KEY_PREFIX + "email"
+    private const val KEY_NAME = KEY_PREFIX + "name"
 
     private const val NULL_ID = -1L
 
@@ -61,14 +61,14 @@ object AccountPreference {
                 return if (id == NULL_ID) null else id
             }
 
-        val email: String?
-            get() = preferences.getString(KEY_EMAIL, null)
+        val name: String?
+            get() = preferences.getString(KEY_NAME, null)
 
-        fun createSession(authToken: String, id: Long, email: String) {
+        fun createSession(authToken: String, id: Long, name: String) {
             preferences.edit {
                 putString(KEY_AUTH_TOKEN, authToken)
                 putLong(KEY_ID, id)
-                putString(KEY_EMAIL, email)
+                putString(KEY_NAME, name)
             }
         }
 
