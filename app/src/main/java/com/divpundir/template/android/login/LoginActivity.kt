@@ -43,12 +43,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.divpundir.template.android.R
 import com.divpundir.template.android.core.ui.AppTheme
 import com.divpundir.template.android.core.ui.toastError
+import com.divpundir.template.android.core.ui.toastNormal
 import com.divpundir.template.android.core.util.isValidEmail
 import com.divpundir.template.android.core.util.isValidPassword
 import com.divpundir.template.android.home.HomeActivity
-import com.divpundir.template.ktor.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -87,6 +88,7 @@ class LoginActivity : ComponentActivity() {
                 .collect {
                     when (it) {
                         is UiEvent.LoginSuccess -> {
+                            toastNormal(it.message)
                             HomeActivity.start(this@LoginActivity)
                         }
 
@@ -130,7 +132,7 @@ private fun LoginActivityScreen(viewModel: LoginViewModel) {
 
         InputTextField(
             modifier = Modifier.width(360.dp),
-            label = { Text("Email") },
+            label = { Text(stringResource(R.string.label_email)) },
             enabled = uiEnabled,
             isError = email.isNotEmpty() && !email.trim().isValidEmail(),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -143,7 +145,7 @@ private fun LoginActivityScreen(viewModel: LoginViewModel) {
 
         InputTextField(
             modifier = Modifier.width(360.dp),
-            label = { Text("Password") },
+            label = { Text(stringResource(R.string.label_password)) },
             enabled = uiEnabled,
             isError = password.isNotEmpty() &&
                 !password.trim().isValidPassword(minLength = LoginViewModel.PASSWORD_MIN_LENGTH),
@@ -171,7 +173,7 @@ private fun LoginActivityScreen(viewModel: LoginViewModel) {
             enabled = uiEnabled,
             onClick = viewModel::loginWithPassword
         ) {
-            Text(text = "Login")
+            Text(text = stringResource(R.string.label_login))
         }
 
         Spacer(modifier = Modifier.height(32.dp))

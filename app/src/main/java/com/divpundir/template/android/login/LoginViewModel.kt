@@ -2,6 +2,8 @@ package com.divpundir.template.android.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.divpundir.template.android.R
+import com.divpundir.template.android.core.ui.UiText
 import com.divpundir.template.android.core.util.isValidEmail
 import com.divpundir.template.android.core.util.isValidPassword
 import com.divpundir.template.android.login.api.LoginWithPassword
@@ -50,7 +52,7 @@ class LoginViewModel @Inject constructor(
             viewModelScope.launch {
                 _uiEvent.emit(
                     UiEvent.LoginFailure(
-                        "Invalid credentials"
+                        UiText.Res(R.string.err_invalid_credentials)
                     )
                 )
             }
@@ -61,7 +63,7 @@ class LoginViewModel @Inject constructor(
             viewModelScope.launch {
                 _uiEvent.emit(
                     UiEvent.LoginFailure(
-                        "Invalid email"
+                        UiText.Res(R.string.err_invalid_email)
                     )
                 )
             }
@@ -72,7 +74,7 @@ class LoginViewModel @Inject constructor(
             viewModelScope.launch {
                 _uiEvent.emit(
                     UiEvent.LoginFailure(
-                        "Invalid password"
+                        UiText.Res(R.string.err_invalid_password)
                     )
                 )
             }
@@ -91,7 +93,7 @@ class LoginViewModel @Inject constructor(
                 _uiState.value = UiState.Normal
                 _uiEvent.emit(
                     UiEvent.LoginFailure(
-                        "Login failure"
+                        UiText.Res(R.string.err_login_failure)
                     )
                 )
                 return@launch
@@ -105,7 +107,7 @@ class LoginViewModel @Inject constructor(
 
             _uiEvent.emit(
                 UiEvent.LoginSuccess(
-                    "Welcome, ${result.userName}!"
+                    UiText.Res(R.string.fmt_welcome, result.userName)
                 )
             )
         }

@@ -7,7 +7,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
+import com.divpundir.template.android.core.preferences.AccountPreference
 import com.divpundir.template.android.core.ui.AppTheme
+import com.divpundir.template.android.login.LoginActivity
+import javax.inject.Inject
 
 class HomeActivity : ComponentActivity() {
 
@@ -23,10 +26,20 @@ class HomeActivity : ComponentActivity() {
         }
     }
 
+    @Inject
+    internal lateinit var accPrefManager: AccountPreference.Manager
+
     private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (!accPrefManager.isLoggedIn) {
+            LoginActivity.start(this)
+            finish()
+            return
+        }
+
         setContent {
             AppTheme {
                 HomeActivityScreen(viewModel)
