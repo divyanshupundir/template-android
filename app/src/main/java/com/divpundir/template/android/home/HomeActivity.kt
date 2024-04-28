@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import com.divpundir.template.android.core.preferences.AccountPreference
 import com.divpundir.template.android.core.ui.AppTheme
 import com.divpundir.template.android.login.LoginActivity
@@ -42,11 +43,19 @@ class HomeActivity : ComponentActivity() {
 
         setContent {
             AppTheme {
-                HomeActivityScreen(viewModel)
+                HomeActivityScreen()
             }
         }
     }
 }
 
+@Preview
 @Composable
-private fun HomeActivityScreen(viewModel: HomeViewModel) {}
+private fun HomeActivityPreview() {
+    AppTheme {
+        HomeActivityScreen()
+    }
+}
+
+@Composable
+private fun HomeActivityScreen() {}
