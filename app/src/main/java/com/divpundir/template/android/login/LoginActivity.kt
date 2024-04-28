@@ -2,6 +2,7 @@ package com.divpundir.template.android.login
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -39,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -73,7 +75,18 @@ class LoginActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AppTheme {
-                LoginActivityScreen(viewModel)
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                val email by viewModel.email.collectAsStateWithLifecycle()
+                val password by viewModel.password.collectAsStateWithLifecycle()
+
+                LoginActivityScreen(
+                    uiState = uiState,
+                    email = email,
+                    onEmailChange = viewModel::setEmail,
+                    password = password,
+                    onPasswordChange = viewModel::setPassword,
+                    loginWithPassword = viewModel::loginWithPassword
+                )
             }
         }
 
@@ -101,12 +114,33 @@ class LoginActivity : ComponentActivity() {
     }
 }
 
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    showBackground = true
+)
 @Composable
-private fun LoginActivityScreen(viewModel: LoginViewModel) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val email by viewModel.email.collectAsStateWithLifecycle()
-    val password by viewModel.password.collectAsStateWithLifecycle()
+private fun LoginActivityPreview() {
+    AppTheme {
+        LoginActivityScreen(
+            uiState = UiState.Normal,
+            email = "abcd@efgh.com",
+            onEmailChange = {},
+            password = "12345678",
+            onPasswordChange = {},
+            loginWithPassword = {}
+        )
+    }
+}
 
+@Composable
+private fun LoginActivityScreen(
+    uiState: UiState,
+    email: String,
+    onEmailChange: (String) -> Unit,
+    password: String,
+    onPasswordChange: (String) -> Unit,
+    loginWithPassword: () -> Unit
+) {
     var isPasswordVisible by remember { mutableStateOf(false) }
 
     val uiEnabled = when (uiState) {
@@ -138,7 +172,7 @@ private fun LoginActivityScreen(viewModel: LoginViewModel) {
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
             value = email,
-            onValueChange = viewModel::setEmail
+            onValueChange = onEmailChange
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -161,7 +195,7 @@ private fun LoginActivityScreen(viewModel: LoginViewModel) {
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
             value = password,
-            onValueChange = viewModel::setPassword
+            onValueChange = onPasswordChange
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -171,7 +205,7 @@ private fun LoginActivityScreen(viewModel: LoginViewModel) {
                 .width(360.dp)
                 .height(48.dp),
             enabled = uiEnabled,
-            onClick = viewModel::loginWithPassword
+            onClick = loginWithPassword
         ) {
             Text(text = stringResource(R.string.label_login))
         }
