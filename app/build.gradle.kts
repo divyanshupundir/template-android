@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlinx.serialization)
 }
@@ -34,10 +34,6 @@ android {
     buildFeatures {
         buildConfig = true
         compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.androidx.compose.compiler.get().version
     }
 
     packaging {
@@ -84,6 +80,10 @@ android {
     }
 }
 
+composeCompiler {
+    this.enableStrongSkippingMode.set(true)
+}
+
 dependencies {
     coreLibraryDesugaring(libs.android.desugar)
     implementation(libs.android.material)
@@ -101,7 +101,6 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
 
     implementation(libs.androidx.compose.animation)
-    implementation(libs.androidx.compose.compiler)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.compose.ui)
@@ -122,7 +121,7 @@ dependencies {
     androidTestImplementation(libs.androidx.test.espresso.core)
 
     implementation(libs.hilt.core)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.guava)
